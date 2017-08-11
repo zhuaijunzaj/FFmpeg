@@ -20,6 +20,7 @@ public:
     MediaControl();
     ~MediaControl();
     int openMedia(const char* path,float windowWidth,float windowHeght);
+    int play(float pos = 0);
     MediaContext *mediaCtx();
 private:
     ZJVideoDecoder *vDecoder;

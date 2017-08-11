@@ -85,6 +85,17 @@ int FFmpegReader::readPacket(AVPacket *packet)
     if (nReadRet < 0) return -1;
     return nReadRet;
 }
+int FFmpegReader::setplayerPos(float pos)
+{
+    if (pos > mediaCtx.duration){
+        return -1;
+    }
+    int64_t timeStamp = (int64_t)pos*1000;
+    avformat_flush(mediaCtx.pFormatCtx);
+    int ret = av_seek_frame(mediaCtx.pFormatCtx, -1, timeStamp, AVSEEK_FLAG_BACKWARD);
+    if (ret < 0) return -1;
+    return 0;
+}
  MediaContext* FFmpegReader::getMediaCtx()
 {
     return &mediaCtx;

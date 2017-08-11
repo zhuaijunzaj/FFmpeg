@@ -52,3 +52,19 @@ MediaContext* MediaControl::mediaCtx()
 {
     return vReader->getMediaCtx();
 }
+
+int MediaControl::play(float pos)
+{
+    if (pos > 0){
+       int ret = vReader->setplayerPos(pos);
+        if (ret == 0){
+            AVPacket *packet = NULL;
+            ret = vReader->readPacket(packet);
+            if (ret > 0) {
+                
+            }
+            return -1;
+        }
+    }
+    return -1;
+}

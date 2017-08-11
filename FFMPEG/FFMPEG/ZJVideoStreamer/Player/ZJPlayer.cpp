@@ -47,12 +47,14 @@ PlayerStatus ZJPlayer::getPlayerStatus()
 {
     return mplayerStatus;
 }
-//int ZJPlayer::play(float pos)
-//{
-//    if (checkNextStatus(ZJPlayerStatus_Playing) == 0){
-//        
-//    }
-//}
+int ZJPlayer::play(float pos)
+{
+    if (checkNextStatus(ZJPlayerStatus_Playing) == 0){
+        mplayerStatus = ZJPlayerStatus_Playing;
+      return mediaCtl->play(pos);
+    }
+    return -1;
+}
 int ZJPlayer::checkNextStatus(PlayerStatus status)
 {
     int ret = Player_Err_UnKnown;

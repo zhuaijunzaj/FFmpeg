@@ -43,6 +43,7 @@ public:
     
     int openMedia(const char* mediaPath);
     void closeMedia();
+    int setplayerPos(float pos);
     int readPacket(AVPacket *packet);
     MediaContext* getMediaCtx();
 private:
