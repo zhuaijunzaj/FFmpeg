@@ -60,7 +60,9 @@ int MediaControl::play(float pos)
         if (ret == 0){
             AVPacket *packet = NULL;
             ret = vReader->readPacket(packet);
-            if (ret > 0) {
+            if (ret == Source_Err_ReadVideoPkt) {
+                
+            }else if (Source_Err_ReadAudioPkt){
                 
             }
             return -1;

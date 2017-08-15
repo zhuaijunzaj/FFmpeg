@@ -82,8 +82,20 @@ int FFmpegReader::openMedia(const char *mediaPath)
 int FFmpegReader::readPacket(AVPacket *packet)
 {
     int nReadRet = av_read_frame(mediaCtx.pFormatCtx, packet);
-    if (nReadRet < 0) return -1;
-    return nReadRet;
+    if (nReadRet >= 0){
+        if (packet->stream_index == m_videoStreamIndex){
+            return Source_Err_ReadVideoPkt;
+        }else if (packet->stream_index == m_audioStreamIndex){
+            return Source_Err_ReadAudioPkt;
+        }else{
+            av_packet_unref(packet);
+        }
+    }else if (nReadRet == AVERROR_EOF){
+        return Source_Err_ReadEOS;
+    }else{
+        return Source_Err_ReadPacketFaild;
+    }
+    return 0;
 }
 int FFmpegReader::setplayerPos(float pos)
 {

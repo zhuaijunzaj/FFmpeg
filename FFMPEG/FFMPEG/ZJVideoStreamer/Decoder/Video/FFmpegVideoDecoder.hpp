@@ -28,6 +28,7 @@ public:
     int openDecoder(ZJMediaContext *mediaCtx);
     void closeDecoder();
     int getOutputFrame(VideoFrame *outFrame);
+    int setInputFrmame(AVPacket *inoutPacket);
 private:
     
     static AVPixelFormat getVideoDecoderPixFormat(AVCodecContext* context, AVPixelFormat const formats[]);

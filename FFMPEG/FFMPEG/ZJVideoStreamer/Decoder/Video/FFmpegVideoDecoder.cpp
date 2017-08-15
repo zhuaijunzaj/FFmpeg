@@ -60,7 +60,15 @@ int FFmpegVideoDecoder::getOutputFrame(VideoFrame *outFrame)
     }
     return ret;
 }
-
+int FFmpegVideoDecoder::setInputFrmame(AVPacket *inoutPacket)
+{
+    int ret = avcodec_send_packet(videoCodecCtx, inoutPacket);
+    if (ret == 0){
+        av_packet_unref(inoutPacket);
+        return -1;
+    }
+    return -1;
+}
 AVPixelFormat FFmpegVideoDecoder::getVideoDecoderPixFormat(AVCodecContext *context, const AVPixelFormat *formats)
 {
     uint32_t i = 0;

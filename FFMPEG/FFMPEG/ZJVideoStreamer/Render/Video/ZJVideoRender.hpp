@@ -11,18 +11,23 @@
 
 #include <stdio.h>
 #include "SDL.h"
-
+#import <libswscale/swscale.h>
+#include "FFmpegReader.hpp"
 class ZJVideoRender{
 public:
     ZJVideoRender();
     ~ZJVideoRender();
     
     int renderInit(float width,float height);
+    int renderVideo(ZJMediaContext *mediaCtx,AVFrame *pFrame);
 private:
     SDL_Window *window;
     SDL_Renderer *sdlRender;
     SDL_Texture *sdlTextureRender;
-    SDL_Rect    *sdlRect;
+    SDL_Rect    sdlRect;
+    AVFrame *frameYUV;
+    unsigned char *out_buffer;
+    struct SwsContext *video_convert_ctx;
     float screen_w;
     float screen_h;
 };
