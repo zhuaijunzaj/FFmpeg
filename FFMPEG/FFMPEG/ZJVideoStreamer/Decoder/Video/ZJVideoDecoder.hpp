@@ -25,8 +25,10 @@ public:
     
     int openDecoder(ZJMediaContext *mediaCtx);
     void closeDecoder();
-    int getVideoFrame(VideoFrame *pFrameout);
+    int flushDecoder(AVFrame* vFrame);
+    int flushPacket();
 private:
     FFmpegVideoDecoder *videoDecoder;
+    AVPacket *videoPacket;
 };
 #endif /* ZJVideoDecoder_hpp */

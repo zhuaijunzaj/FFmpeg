@@ -12,6 +12,9 @@
 ZJVideoDecoder::ZJVideoDecoder()
 {
     videoDecoder = new FFmpegVideoDecoder();
+    videoPacket = av_packet_alloc();
+    videoPacket->data = NULL;
+    videoPacket->size = 0;
 }
 
 int ZJVideoDecoder::openDecoder(ZJMediaContext *mediaCtx)
@@ -19,6 +22,7 @@ int ZJVideoDecoder::openDecoder(ZJMediaContext *mediaCtx)
     if (mediaCtx == NULL){
         return -1;
     }
+    
     return videoDecoder->openDecoder(mediaCtx);
 }
 
@@ -26,12 +30,24 @@ void ZJVideoDecoder::closeDecoder()
 {
     videoDecoder->closeDecoder();
 }
-int getVideoFrame(VideoFrame *pFrameout)
+
+int ZJVideoDecoder::flushPacket()
 {
-    int ret = -1;
-    if (pFrameout){
-        
+    int ret = videoDecoder->setInputFrmame(videoPacket);
+    if (ret < 0){
+        printf("decoder failed");
+        return -1;
     }
-    
-    return ret;
+    return 0;
+}
+int ZJVideoDecoder::flushDecoder(AVFrame *vFrame)
+{
+    VideoFrame *pFrame = NULL;
+    int ret = videoDecoder->getOutputFrame(pFrame);
+    if (ret < 0 && ret != AVERROR_EOF){
+        av_packet_unref(videoPacket);
+        return -1;
+    }
+    vFrame = pFrame->pFrame;
+    return 0;
 }

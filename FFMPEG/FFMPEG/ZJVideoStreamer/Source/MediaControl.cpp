@@ -61,7 +61,16 @@ int MediaControl::play(float pos)
             AVPacket *packet = NULL;
             ret = vReader->readPacket(packet);
             if (ret == Source_Err_ReadVideoPkt) {
-                
+                ret = vDecoder->flushPacket();
+                if (ret == 0){
+                    do {
+                        AVFrame *vFrame = av_frame_alloc();
+                        ret = vDecoder->flushDecoder(vFrame);
+                        vRender->renderVideo(mediaCtx(), vFrame);
+                    } while (ret >= 0);
+                }else{
+                    return -1;
+                }
             }else if (Source_Err_ReadAudioPkt){
                 
             }
